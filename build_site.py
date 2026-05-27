@@ -234,6 +234,39 @@ def render_html(posts: list[dict], summary: dict) -> str:
             """
         )
 
+    hero_spot = featured[0] if featured else None
+    hero_spot_markup = ""
+    if hero_spot:
+        hero_spot_title = esc(hero_spot["title"])
+        hero_spot_cover = esc(hero_spot["coverUrl"])
+        hero_spot_fallback = esc(
+            json.dumps(
+                {
+                    "images": hero_spot["imageUrls"],
+                    "videos": hero_spot["videoUrls"],
+                    "title": hero_spot["title"],
+                },
+                ensure_ascii=False,
+            )
+        )
+        hero_spot_media = (
+            f'<img src="{hero_spot_cover}" alt="{hero_spot_title}" loading="lazy" data-fallback-media="{hero_spot_fallback}" data-placeholder-text="首屏封面加载失败">'
+            if hero_spot["coverType"] == "image"
+            else f'<video muted playsinline autoplay loop preload="metadata" src="{hero_spot_cover}"></video>'
+        )
+        hero_spot_markup = f"""
+          <div class="hero-stage-card" data-open-title="{hero_spot_title}">
+            <div class="hero-stage-media">
+              {hero_spot_media}
+            </div>
+            <div class="hero-stage-copy">
+              <p class="eyebrow">{esc(hero_spot["displayDate"])} · {esc(" · ".join(hero_spot["themes"]))}</p>
+              <h3>{hero_spot_title}</h3>
+              <p>{esc(hero_spot["excerpt"])}</p>
+            </div>
+          </div>
+        """
+
     year_links = []
     for year in summary["years"]:
         year_links.append(
@@ -400,18 +433,39 @@ def render_html(posts: list[dict], summary: dict) -> str:
       padding: clamp(26px, 4vw, 42px);
       position: relative;
       overflow: hidden;
-      min-height: 480px;
+      min-height: 620px;
+      background:
+        linear-gradient(115deg, rgba(58, 37, 23, 0.24), rgba(76, 48, 27, 0.08)),
+        radial-gradient(circle at 18% 22%, rgba(255, 221, 179, 0.38), transparent 24%),
+        linear-gradient(180deg, rgba(255, 252, 247, 0.72), rgba(248, 240, 230, 0.84));
     }}
 
     .hero-main::after {{
       content: "";
       position: absolute;
-      width: 280px;
-      height: 280px;
-      right: -70px;
-      top: -70px;
+      width: 520px;
+      height: 520px;
+      right: -120px;
+      top: -140px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(214, 131, 82, 0.24), transparent 68%);
+      background: radial-gradient(circle, rgba(214, 131, 82, 0.2), transparent 68%);
+      animation: drift 18s ease-in-out infinite alternate;
+    }}
+
+    .hero-main::before {{
+      content: "";
+      position: absolute;
+      inset: auto auto 36px 40%;
+      width: 220px;
+      height: 120px;
+      background:
+        radial-gradient(circle at 15% 45%, rgba(238, 245, 255, 0.86) 0 18%, transparent 19%),
+        radial-gradient(circle at 36% 35%, rgba(238, 245, 255, 0.9) 0 22%, transparent 23%),
+        radial-gradient(circle at 58% 48%, rgba(238, 245, 255, 0.86) 0 24%, transparent 25%),
+        radial-gradient(circle at 78% 40%, rgba(238, 245, 255, 0.82) 0 18%, transparent 19%);
+      filter: blur(2px);
+      opacity: 0.72;
+      animation: cloudFloat 14s ease-in-out infinite alternate;
     }}
 
     .hero-copy-wrap {{
@@ -419,7 +473,123 @@ def render_html(posts: list[dict], summary: dict) -> str:
       z-index: 1;
       display: grid;
       gap: 22px;
-      align-content: start;
+      align-content: space-between;
+      min-height: 100%;
+    }}
+
+    .hero-decor {{
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }}
+
+    .leaf-shadow {{
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      background:
+        radial-gradient(ellipse at 30% 40%, rgba(109, 142, 100, 0.2) 0 18%, transparent 20%),
+        radial-gradient(ellipse at 58% 25%, rgba(127, 164, 118, 0.18) 0 16%, transparent 18%),
+        radial-gradient(ellipse at 70% 58%, rgba(149, 184, 137, 0.16) 0 18%, transparent 20%);
+      filter: blur(10px);
+      opacity: 0.72;
+      transform-origin: center;
+      animation: sway 7s ease-in-out infinite;
+    }}
+
+    .leaf-shadow.leaf-a {{
+      top: 40px;
+      right: 120px;
+      transform: rotate(14deg);
+    }}
+
+    .leaf-shadow.leaf-b {{
+      bottom: 70px;
+      left: 44%;
+      width: 220px;
+      height: 220px;
+      transform: rotate(-18deg);
+      animation-delay: -2.4s;
+    }}
+
+    .hero-stage {{
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      align-items: end;
+    }}
+
+    .hero-stage-card {{
+      position: relative;
+      display: grid;
+      overflow: hidden;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      box-shadow: 0 30px 70px rgba(43, 24, 12, 0.18);
+      cursor: pointer;
+      min-height: 280px;
+    }}
+
+    .hero-stage-card::after {{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(29, 18, 11, 0.02), rgba(29, 18, 11, 0.58));
+      pointer-events: none;
+    }}
+
+    .hero-stage-media {{
+      position: absolute;
+      inset: 0;
+      background: #e8dccd;
+    }}
+
+    .hero-stage-media img,
+    .hero-stage-media video {{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.04);
+    }}
+
+    .hero-stage-copy {{
+      position: relative;
+      z-index: 1;
+      margin-top: auto;
+      padding: 22px;
+      color: #fffaf5;
+      display: grid;
+      gap: 8px;
+      align-content: end;
+    }}
+
+    .hero-stage-copy h3 {{
+      margin: 0;
+      font-size: clamp(1.3rem, 2vw, 1.85rem);
+      line-height: 1.28;
+    }}
+
+    .hero-stage-copy p {{
+      color: rgba(255, 248, 241, 0.88);
+      max-width: none;
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }}
+
+    .hero-note {{
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255, 251, 245, 0.68);
+      border: 1px solid rgba(108, 78, 50, 0.12);
+      box-shadow: 0 16px 40px rgba(63, 41, 24, 0.08);
+      backdrop-filter: blur(12px);
+    }}
+
+    .hero-note p {{
+      margin: 0;
+      font-size: 0.98rem;
+      line-height: 1.8;
     }}
 
     .label {{
@@ -1103,10 +1273,44 @@ def render_html(posts: list[dict], summary: dict) -> str:
       }}
     }}
 
+    @keyframes cloudFloat {{
+      from {{
+        transform: translateX(0) translateY(0);
+      }}
+      to {{
+        transform: translateX(42px) translateY(-10px);
+      }}
+    }}
+
+    @keyframes sway {{
+      0% {{
+        transform: rotate(-8deg) translateY(0);
+      }}
+      50% {{
+        transform: rotate(5deg) translateY(8px);
+      }}
+      100% {{
+        transform: rotate(-4deg) translateY(-4px);
+      }}
+    }}
+
+    @keyframes drift {{
+      from {{
+        transform: translate3d(0, 0, 0);
+      }}
+      to {{
+        transform: translate3d(-28px, 18px, 0);
+      }}
+    }}
+
     @media (max-width: 1100px) {{
       .hero,
       .filters,
       .content-grid {{
+        grid-template-columns: 1fr;
+      }}
+
+      .hero-stage {{
         grid-template-columns: 1fr;
       }}
 
@@ -1169,13 +1373,28 @@ def render_html(posts: list[dict], summary: dict) -> str:
 
     <section class="hero fade-in">
       <div class="hero-main">
+        <div class="hero-decor" aria-hidden="true">
+          <div class="leaf-shadow leaf-a"></div>
+          <div class="leaf-shadow leaf-b"></div>
+        </div>
         <div class="hero-copy-wrap">
-          <div class="label">Visual Diary</div>
-          <h2>把旅行、猫咪、城市与回忆，编成一页页可播放的生活杂志。</h2>
-          <p>
-            这批素材最适合做成偏杂志化的影像博客，而不是普通文件列表。它有明显的时间推进、反复出现的猫咪线索、
-            高频旅行片段和个人节奏感，所以页面以「时间轴 + 主题筛选 + 文章式卡片」来承载这些内容。
-          </p>
+          <div>
+            <div class="label">Visual Diary</div>
+            <h2>把旅行、猫咪、城市与回忆，编成一页页可播放的生活杂志。</h2>
+            <p>
+              这批素材最适合做成偏杂志化的影像博客，而不是普通文件列表。它有明显的时间推进、反复出现的猫咪线索、
+              高频旅行片段和个人节奏感，所以页面以「时间轴 + 主题筛选 + 文章式卡片」来承载这些内容。
+            </p>
+          </div>
+          <div class="hero-stage">
+            {hero_spot_markup}
+            <div class="hero-note">
+              <p>
+                云层会缓慢移动，叶影在角落轻轻摇晃，像翻开一册被阳光照过的旧相簿。
+                在这里，回忆不是归档后的冰冷文件，而是仍在呼吸、仍可停留的生活现场。
+              </p>
+            </div>
+          </div>
           <div class="stat-grid">
             <div class="stat">
               <strong>{summary["stats"]["stories"]}</strong>
@@ -1660,6 +1879,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
       if (event.key === "Escape") closeModal();
     }});
 
+    attachMediaFallbacks(document.querySelector(".hero-main"));
     renderLetter();
     startMemoryCarousel();
     refreshButtonState();
