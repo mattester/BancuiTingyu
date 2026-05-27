@@ -640,21 +640,110 @@ def render_html(posts: list[dict], summary: dict) -> str:
 
     .content-grid {{
       display: grid;
-      grid-template-columns: 0.8fr 1.2fr;
+      grid-template-columns: 0.78fr 1.22fr 0.72fr;
       gap: 22px;
       align-items: start;
+    }}
+
+    .sidebar-stack {{
+      display: grid;
+      gap: 22px;
+      align-self: start;
     }}
 
     .timeline {{
       position: sticky;
       top: 16px;
       padding: 22px;
+      max-height: calc(100vh - 32px);
+      overflow: hidden;
+    }}
+
+    .timeline-scroll {{
+      margin-top: 16px;
+      max-height: calc(100vh - 170px);
+      overflow-y: auto;
+      padding-right: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(188, 108, 74, 0.38) rgba(255, 255, 255, 0.3);
+    }}
+
+    .timeline-scroll::-webkit-scrollbar {{
+      width: 8px;
+    }}
+
+    .timeline-scroll::-webkit-scrollbar-thumb {{
+      background: rgba(188, 108, 74, 0.38);
+      border-radius: 999px;
+    }}
+
+    .timeline-scroll::-webkit-scrollbar-track {{
+      background: rgba(255, 255, 255, 0.32);
+      border-radius: 999px;
     }}
 
     .timeline-list {{
       display: grid;
       gap: 14px;
-      margin-top: 18px;
+    }}
+
+    .memory-card {{
+      padding: 18px;
+      overflow: hidden;
+      position: sticky;
+      top: 16px;
+    }}
+
+    .memory-stage {{
+      margin-top: 16px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(245, 231, 218, 0.96), rgba(255, 251, 245, 0.9));
+      border: 1px solid rgba(90, 62, 38, 0.1);
+    }}
+
+    .memory-media {{
+      aspect-ratio: 4 / 3;
+      background: #e8dccd;
+      overflow: hidden;
+    }}
+
+    .memory-media img,
+    .memory-media video {{
+      height: 100%;
+      object-fit: cover;
+    }}
+
+    .memory-copy {{
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }}
+
+    .memory-copy h3 {{
+      margin: 0;
+      font-size: 1.15rem;
+      line-height: 1.45;
+    }}
+
+    .memory-dots {{
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+    }}
+
+    .memory-dot {{
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(188, 108, 74, 0.22);
+      transition: transform 160ms ease, background 160ms ease;
+    }}
+
+    .memory-dot.active {{
+      background: var(--accent);
+      transform: scale(1.2);
     }}
 
     .timeline-item {{
@@ -717,6 +806,104 @@ def render_html(posts: list[dict], summary: dict) -> str:
     .posts-area {{
       display: grid;
       gap: 18px;
+    }}
+
+    .letter-card {{
+      padding: 22px;
+      position: sticky;
+      top: 16px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 14% 16%, rgba(190, 218, 188, 0.38), transparent 16%),
+        radial-gradient(circle at 85% 12%, rgba(223, 233, 250, 0.42), transparent 18%),
+        radial-gradient(circle at 78% 90%, rgba(243, 217, 183, 0.5), transparent 18%),
+        linear-gradient(180deg, rgba(255, 252, 247, 0.97), rgba(250, 244, 235, 0.96));
+    }}
+
+    .letter-card::before,
+    .letter-card::after {{
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.38;
+    }}
+
+    .letter-card::before {{
+      width: 96px;
+      height: 96px;
+      right: -12px;
+      top: 42px;
+      background:
+        radial-gradient(circle at 30% 50%, rgba(118, 154, 120, 0.72) 0 22%, transparent 24%),
+        radial-gradient(circle at 55% 35%, rgba(145, 183, 141, 0.72) 0 22%, transparent 24%),
+        radial-gradient(circle at 70% 62%, rgba(169, 201, 157, 0.72) 0 22%, transparent 24%);
+      filter: blur(0.2px);
+      transform: rotate(22deg);
+    }}
+
+    .letter-card::after {{
+      left: -10px;
+      bottom: 18px;
+      width: 132px;
+      height: 68px;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(221, 232, 248, 0.78) 0 18%, transparent 19%),
+        radial-gradient(circle at 42% 40%, rgba(221, 232, 248, 0.78) 0 20%, transparent 21%),
+        radial-gradient(circle at 64% 52%, rgba(221, 232, 248, 0.78) 0 22%, transparent 23%),
+        radial-gradient(circle at 82% 45%, rgba(221, 232, 248, 0.78) 0 17%, transparent 18%);
+    }}
+
+    .letter-paper {{
+      position: relative;
+      z-index: 1;
+      padding: 24px 22px;
+      border-radius: 26px;
+      background:
+        repeating-linear-gradient(
+          180deg,
+          rgba(145, 115, 88, 0.03) 0,
+          rgba(145, 115, 88, 0.03) 28px,
+          rgba(145, 115, 88, 0.08) 29px,
+          rgba(145, 115, 88, 0.03) 30px
+        ),
+        rgba(255, 252, 247, 0.92);
+      border: 1px solid rgba(90, 62, 38, 0.12);
+    }}
+
+    .letter-kicker {{
+      color: var(--accent-deep);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+    }}
+
+    .letter-title {{
+      margin: 8px 0 12px;
+      font-size: 1.5rem;
+      line-height: 1.35;
+    }}
+
+    .letter-body {{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.95;
+      white-space: pre-line;
+      font-size: 0.98rem;
+    }}
+
+    .letter-quote {{
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px dashed rgba(90, 62, 38, 0.18);
+      font-size: 1rem;
+      line-height: 1.85;
+    }}
+
+    .letter-sign {{
+      margin-top: 16px;
+      text-align: right;
+      color: var(--accent-deep);
+      font-style: italic;
     }}
 
     .posts-head {{
@@ -925,6 +1112,16 @@ def render_html(posts: list[dict], summary: dict) -> str:
 
       .timeline {{
         position: static;
+        max-height: none;
+      }}
+
+      .memory-card,
+      .letter-card {{
+        position: static;
+      }}
+
+      .timeline-scroll {{
+        max-height: 520px;
       }}
     }}
 
@@ -1036,12 +1233,24 @@ def render_html(posts: list[dict], summary: dict) -> str:
     </section>
 
     <section class="content-grid">
-      <aside class="panel timeline fade-in">
-        <div class="section-title">
-          <h3>时间轴速览</h3>
-          <span>点击可直达文章</span>
-        </div>
-        <div id="timelineList" class="timeline-list"></div>
+      <aside class="sidebar-stack fade-in">
+        <section class="panel memory-card">
+          <div class="section-title">
+            <h3>今日翻到的一页</h3>
+            <span>随机轮播影像文章</span>
+          </div>
+          <div id="memoryStage" class="memory-stage"></div>
+        </section>
+
+        <section class="panel timeline">
+          <div class="section-title">
+            <h3>时间轴速览</h3>
+            <span>左侧可独立滚动</span>
+          </div>
+          <div class="timeline-scroll">
+            <div id="timelineList" class="timeline-list"></div>
+          </div>
+        </section>
       </aside>
 
       <main class="posts-area fade-in">
@@ -1057,6 +1266,16 @@ def render_html(posts: list[dict], summary: dict) -> str:
           没有匹配到内容。可以试试清空筛选，或者搜索别的关键词。
         </div>
       </main>
+
+      <aside class="panel letter-card fade-in">
+        <div class="letter-paper">
+          <div class="letter-kicker">A Letter For You</div>
+          <h3 class="letter-title">写给翻到这本影像手账的人</h3>
+          <p id="letterBody" class="letter-body"></p>
+          <div id="letterQuote" class="letter-quote"></div>
+          <div class="letter-sign">愿山高水长，常有回响。</div>
+        </div>
+      </aside>
     </section>
 
     <footer class="footer-note fade-in">
@@ -1089,15 +1308,39 @@ def render_html(posts: list[dict], summary: dict) -> str:
 
     const postGrid = document.getElementById("postGrid");
     const timelineList = document.getElementById("timelineList");
+    const memoryStage = document.getElementById("memoryStage");
     const resultCount = document.getElementById("resultCount");
     const emptyState = document.getElementById("emptyState");
     const searchInput = document.getElementById("searchInput");
+    const letterBody = document.getElementById("letterBody");
+    const letterQuote = document.getElementById("letterQuote");
     const modal = document.getElementById("postModal");
     const modalTitle = document.getElementById("modalTitle");
     const modalDate = document.getElementById("modalDate");
     const modalMeta = document.getElementById("modalMeta");
     const modalBody = document.getElementById("modalBody");
     const modalClose = document.getElementById("modalClose");
+    let memoryIndex = 0;
+    let memoryTimer = null;
+
+    const LETTERS = [
+      {{
+        body: "愿你在翻看这些片段的时候，仍然保有对生活细部的耐心。\\n有风的时候去看云，有雨的时候去听树叶，有人陪伴时认真相处，一个人时也不慌不忙。",
+        quote: "且视他人之疑目如盏盏鬼火，大胆地去走你的夜路。\\n《病隙碎笔》"
+      }},
+      {{
+        body: "如果回忆能被装订成册，那些猫咪、旅途、街头傍晚与细小欢喜，都会在多年以后继续替你发光。\\n愿你始终有记录生活的兴致，也始终被生活温柔记录。",
+        quote: "凡是过往，皆为序章。\\n莎士比亚"
+      }},
+      {{
+        body: "这页书信不写宏大叙事，只写日常的光。\\n愿你所拥有的热爱，不必声张，也能长久；愿你偶尔疲惫时，仍能被一朵云、一片叶、一段旧影像安慰。",
+        quote: "行到水穷处，坐看云起时。\\n王维《终南别业》"
+      }},
+      {{
+        body: "愿你在很远的地方，也能想起此刻的自己曾经这样认真地生活过。\\n路过的人、经过的城、被镜头留下来的猫与风景，终会一起构成你的答案。",
+        quote: "我们终其一生，就是要摆脱他人的期待，找到真正的自己。\\n《无声告白》"
+      }}
+    ];
 
     function escapeHtml(value) {{
       return value
@@ -1193,6 +1436,53 @@ def render_html(posts: list[dict], summary: dict) -> str:
           </div>
         </article>
       `).join("");
+    }}
+
+    function renderMemorySpotlight() {{
+      const pool = SITE_DATA.posts.slice(0, Math.min(12, SITE_DATA.posts.length));
+      if (!pool.length) return;
+      const post = pool[memoryIndex % pool.length];
+      const cover = post.coverUrl || "";
+      const fallbackMedia = escapeHtml(JSON.stringify({{
+        images: post.imageUrls || [],
+        videos: post.videoUrls || [],
+        title: post.title || ""
+      }}));
+      const media = post.coverType === "image"
+        ? `<img src="${{escapeHtml(cover)}}" alt="${{escapeHtml(post.title)}}" loading="lazy" data-fallback-media="${{fallbackMedia}}" data-placeholder-text="轮播封面加载失败">`
+        : post.coverType === "video"
+          ? `<video muted playsinline autoplay loop preload="metadata" src="${{escapeHtml(cover)}}"></video>`
+          : `<div style="height:100%;display:grid;place-items:center;color:var(--muted);background:#eadfce;">暂无封面</div>`;
+      const dots = pool.map((_, index) => `<span class="memory-dot ${{index === (memoryIndex % pool.length) ? "active" : ""}}"></span>`).join("");
+      memoryStage.innerHTML = `
+        <article class="memory-slide" data-open-title="${{escapeHtml(post.title)}}">
+          <div class="memory-media">${{media}}</div>
+          <div class="memory-copy">
+            <p class="eyebrow">${{post.displayDate}} · ${{post.themes.join(" · ")}}</p>
+            <h3>${{escapeHtml(post.title)}}</h3>
+            <p>${{escapeHtml(post.excerpt)}}</p>
+            <p class="meta-line">${{post.counts.video}} 视频 · ${{post.counts.image}} 图像${{post.counts.audio ? ` · ${{post.counts.audio}} 音频` : ""}}</p>
+            <div class="memory-dots">${{dots}}</div>
+          </div>
+        </article>
+      `;
+      attachMediaFallbacks(memoryStage);
+      bindOpenEvents();
+    }}
+
+    function startMemoryCarousel() {{
+      if (memoryTimer) clearInterval(memoryTimer);
+      renderMemorySpotlight();
+      memoryTimer = setInterval(() => {{
+        memoryIndex = (memoryIndex + 1) % Math.max(1, Math.min(12, SITE_DATA.posts.length));
+        renderMemorySpotlight();
+      }}, 5200);
+    }}
+
+    function renderLetter() {{
+      const pick = LETTERS[Math.floor((SITE_DATA.posts.length * 7 + new Date().getDate()) % LETTERS.length)];
+      letterBody.textContent = pick.body;
+      letterQuote.innerHTML = pick.quote.replaceAll("\\n", "<br>");
     }}
 
     function renderPosts() {{
@@ -1370,6 +1660,8 @@ def render_html(posts: list[dict], summary: dict) -> str:
       if (event.key === "Escape") closeModal();
     }});
 
+    renderLetter();
+    startMemoryCarousel();
     refreshButtonState();
     renderPosts();
   </script>
