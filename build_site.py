@@ -7,6 +7,7 @@ import re
 from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import quote
 
 
 ROOT = Path.cwd()
@@ -84,6 +85,10 @@ def format_size(num_bytes: int) -> str:
     return f"{value:.1f} {units[power]}"
 
 
+def to_asset_url(filename: str) -> str:
+    return quote(filename, safe="@-_.()~/")
+
+
 def read_posts() -> list[dict]:
     grouped: dict[str, dict] = {}
 
@@ -123,6 +128,7 @@ def read_posts() -> list[dict]:
         title = clean_title(record["raw_title"])
         themes = infer_themes(title)
         cover = image_files[0] if image_files else (video_files[0] if video_files else "")
+        cover_type = "image" if image_files else ("video" if video_files else "none")
         media_count = len(video_files) + len(audio_files) + len(image_files)
 
         posts.append(
@@ -138,9 +144,14 @@ def read_posts() -> list[dict]:
                 "excerpt": excerpt_from_title(record["raw_title"]),
                 "themes": themes,
                 "cover": cover,
+                "coverType": cover_type,
+                "coverUrl": to_asset_url(cover) if cover else "",
                 "videos": video_files,
                 "audios": audio_files,
                 "images": image_files,
+                "videoUrls": [to_asset_url(name) for name in video_files],
+                "audioUrls": [to_asset_url(name) for name in audio_files],
+                "imageUrls": [to_asset_url(name) for name in image_files],
                 "counts": {
                     "video": len(video_files),
                     "audio": len(audio_files),
@@ -190,14 +201,19 @@ def render_html(posts: list[dict], summary: dict) -> str:
 
     hero_cards = []
     for item in featured:
-        thumb = esc(item["cover"])
+        thumb = esc(item["coverUrl"])
         title = esc(item["title"])
         desc = esc(item["excerpt"])
+        thumb_markup = (
+            f'<img src="{thumb}" alt="{title}" loading="lazy">'
+            if item["coverType"] == "image"
+            else f'<video muted playsinline preload="metadata" src="{thumb}"></video>'
+        )
         hero_cards.append(
             f"""
             <article class="hero-card" data-open-title="{title}">
               <div class="hero-thumb">
-                <img src="{thumb}" alt="{title}" loading="lazy">
+                {thumb_markup}
               </div>
               <div class="hero-copy">
                 <p class="eyebrow">{esc(item["displayDate"])}</p>
@@ -503,7 +519,8 @@ def render_html(posts: list[dict], summary: dict) -> str:
       background: #eadfce;
     }}
 
-    .hero-thumb img {{
+    .hero-thumb img,
+    .hero-thumb video {{
       height: 100%;
       object-fit: cover;
     }}
@@ -731,13 +748,15 @@ def render_html(posts: list[dict], summary: dict) -> str:
       position: relative;
     }}
 
-    .post-cover img {{
+    .post-cover img,
+    .post-cover video {{
       height: 100%;
       object-fit: cover;
       transition: transform 280ms ease;
     }}
 
-    .post-card:hover .post-cover img {{
+    .post-card:hover .post-cover img,
+    .post-card:hover .post-cover video {{
       transform: scale(1.03);
     }}
 
@@ -1111,11 +1130,16 @@ def render_html(posts: list[dict], summary: dict) -> str:
       postGrid.innerHTML = posts.map((post) => {{
         const themePills = post.themes.map((theme) => `<span class="meta-pill">${{escapeHtml(theme)}}</span>`).join("");
         const mediaMeta = `${{post.counts.video}} 视频 · ${{post.counts.image}} 图像${{post.counts.audio ? ` · ${{post.counts.audio}} 音频` : ""}}`;
-        const cover = post.cover || "";
+        const cover = post.coverUrl || "";
+        const coverMarkup = post.coverType === "image"
+          ? `<img src="${{escapeHtml(cover)}}" alt="${{escapeHtml(post.title)}}" loading="lazy">`
+          : post.coverType === "video"
+            ? `<video muted playsinline preload="metadata" src="${{escapeHtml(cover)}}"></video>`
+            : `<div style="height:100%;display:grid;place-items:center;color:var(--muted);background:#eadfce;">暂无封面</div>`;
         return `
           <article class="post-card" data-open-title="${{escapeHtml(post.title)}}">
             <div class="post-cover">
-              <img src="${{escapeHtml(cover)}}" alt="${{escapeHtml(post.title)}}" loading="lazy">
+              ${{coverMarkup}}
             </div>
             <p class="eyebrow">${{post.displayDate}}</p>
             <h3>${{escapeHtml(post.title)}}</h3>
@@ -1148,7 +1172,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
               <span>${{post.videos.length}} 个</span>
             </div>
             <div class="video-stack">
-              ${{post.videos.map((src) => `<video controls preload="metadata" src="${{escapeHtml(src)}}"></video>`).join("")}}
+              ${{post.videoUrls.map((src) => `<video controls preload="metadata" src="${{escapeHtml(src)}}"></video>`).join("")}}
             </div>
           </section>
         `);
@@ -1162,7 +1186,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
               <span>${{post.audios.length}} 段</span>
             </div>
             <div class="audio-stack">
-              ${{post.audios.map((src, index) => `
+              ${{post.audioUrls.map((src, index) => `
                 <div class="audio-card">
                   <strong>音频 ${{index + 1}}</strong>
                   <audio controls preload="metadata" src="${{escapeHtml(src)}}"></audio>
@@ -1181,7 +1205,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
               <span>${{post.images.length}} 张</span>
             </div>
             <div class="gallery-grid">
-              ${{post.images.map((src) => `
+              ${{post.imageUrls.map((src) => `
                 <figure class="gallery-item">
                   <img loading="lazy" src="${{escapeHtml(src)}}" alt="${{escapeHtml(post.title)}}">
                 </figure>
