@@ -204,8 +204,18 @@ def render_html(posts: list[dict], summary: dict) -> str:
         thumb = esc(item["coverUrl"])
         title = esc(item["title"])
         desc = esc(item["excerpt"])
+        fallback_payload = esc(
+            json.dumps(
+                {
+                    "images": item["imageUrls"],
+                    "videos": item["videoUrls"],
+                    "title": item["title"],
+                },
+                ensure_ascii=False,
+            )
+        )
         thumb_markup = (
-            f'<img src="{thumb}" alt="{title}" loading="lazy">'
+            f'<img src="{thumb}" alt="{title}" loading="lazy" data-fallback-media="{fallback_payload}" data-placeholder-text="封面加载失败">'
             if item["coverType"] == "image"
             else f'<video muted playsinline preload="metadata" src="{thumb}"></video>'
         )
@@ -1098,6 +1108,69 @@ def render_html(posts: list[dict], summary: dict) -> str:
         .replaceAll("'", "&#39;");
     }}
 
+    function attachMediaFallbacks(root = document) {{
+      root.querySelectorAll("img[data-fallback-media]").forEach((img) => {{
+        if (img.dataset.fallbackBound === "1") return;
+        img.dataset.fallbackBound = "1";
+
+        let payload = {{ images: [], videos: [], title: "" }};
+        try {{
+          payload = JSON.parse(img.dataset.fallbackMedia || "{{}}");
+        }} catch (_error) {{
+          payload = {{ images: [], videos: [], title: "" }};
+        }}
+
+        const imageCandidates = [...new Set((payload.images || []).filter(Boolean))];
+        const videoCandidates = [...new Set((payload.videos || []).filter(Boolean))];
+        let imageIndex = imageCandidates.indexOf(img.getAttribute("src") || "");
+        if (imageIndex < 0) imageIndex = 0;
+        let videoIndex = 0;
+
+        const showPlaceholder = () => {{
+          const holder = document.createElement("div");
+          holder.style.height = "100%";
+          holder.style.display = "grid";
+          holder.style.placeItems = "center";
+          holder.style.color = "var(--muted)";
+          holder.style.background = "#eadfce";
+          holder.textContent = img.dataset.placeholderText || "图片加载失败";
+          img.replaceWith(holder);
+        }};
+
+        const swapToVideo = () => {{
+          if (!videoCandidates.length) {{
+            showPlaceholder();
+            return;
+          }}
+          const video = document.createElement("video");
+          video.muted = true;
+          video.playsInline = true;
+          video.preload = "metadata";
+          video.autoplay = true;
+          video.loop = true;
+          video.src = videoCandidates[videoIndex];
+          video.onerror = () => {{
+            videoIndex += 1;
+            if (videoIndex < videoCandidates.length) {{
+              video.src = videoCandidates[videoIndex];
+            }} else {{
+              showPlaceholder();
+            }}
+          }};
+          img.replaceWith(video);
+        }};
+
+        img.onerror = () => {{
+          imageIndex += 1;
+          if (imageIndex < imageCandidates.length) {{
+            img.src = imageCandidates[imageIndex];
+          }} else {{
+            swapToVideo();
+          }}
+        }};
+      }});
+    }}
+
     function activePosts() {{
       const query = state.query.trim().toLowerCase();
       return SITE_DATA.posts.filter((post) => {{
@@ -1131,8 +1204,13 @@ def render_html(posts: list[dict], summary: dict) -> str:
         const themePills = post.themes.map((theme) => `<span class="meta-pill">${{escapeHtml(theme)}}</span>`).join("");
         const mediaMeta = `${{post.counts.video}} 视频 · ${{post.counts.image}} 图像${{post.counts.audio ? ` · ${{post.counts.audio}} 音频` : ""}}`;
         const cover = post.coverUrl || "";
+        const fallbackMedia = escapeHtml(JSON.stringify({{
+          images: post.imageUrls || [],
+          videos: post.videoUrls || [],
+          title: post.title || ""
+        }}));
         const coverMarkup = post.coverType === "image"
-          ? `<img src="${{escapeHtml(cover)}}" alt="${{escapeHtml(post.title)}}" loading="lazy">`
+          ? `<img src="${{escapeHtml(cover)}}" alt="${{escapeHtml(post.title)}}" loading="lazy" data-fallback-media="${{fallbackMedia}}" data-placeholder-text="封面加载失败">`
           : post.coverType === "video"
             ? `<video muted playsinline preload="metadata" src="${{escapeHtml(cover)}}"></video>`
             : `<div style="height:100%;display:grid;place-items:center;color:var(--muted);background:#eadfce;">暂无封面</div>`;
@@ -1152,6 +1230,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
 
       renderTimeline(posts);
       bindOpenEvents();
+      attachMediaFallbacks(postGrid);
     }}
 
     function openPost(title) {{
@@ -1198,6 +1277,11 @@ def render_html(posts: list[dict], summary: dict) -> str:
       }}
 
       if (post.images.length) {{
+        const fallbackMedia = escapeHtml(JSON.stringify({{
+          images: post.imageUrls || [],
+          videos: post.videoUrls || [],
+          title: post.title || ""
+        }}));
         sections.push(`
           <section>
             <div class="section-title">
@@ -1207,7 +1291,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
             <div class="gallery-grid">
               ${{post.imageUrls.map((src) => `
                 <figure class="gallery-item">
-                  <img loading="lazy" src="${{escapeHtml(src)}}" alt="${{escapeHtml(post.title)}}">
+                  <img loading="lazy" src="${{escapeHtml(src)}}" alt="${{escapeHtml(post.title)}}" data-fallback-media="${{fallbackMedia}}" data-placeholder-text="图片加载失败">
                 </figure>
               `).join("")}}
             </div>
@@ -1216,6 +1300,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
       }}
 
       modalBody.innerHTML = sections.join("");
+      attachMediaFallbacks(modalBody);
       modal.classList.add("open");
       modal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
