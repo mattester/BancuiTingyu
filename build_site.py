@@ -197,12 +197,94 @@ def load_blessings() -> dict:
     default_items = [
         {
             "type": "letter",
-            "title": "写给翻到这本影像手账的人",
-            "body": "愿你在翻看这些片段的时候，仍然保有对生活细部的耐心。\n有风的时候去看云，有雨的时候去听树叶，有人陪伴时认真相处，一个人时也不慌不忙。",
-            "quote": "且视他人之疑目如盏盏鬼火，大胆地去走你的夜路。",
-            "author": "史铁生《病隙碎笔》",
+            "lang": "zh",
+            "title": "写给翻到这一页的人",
+            "body": "这不是一份冷冰冰的文件清单，而是一册会呼吸的生活手账。\n愿你每次点开它，都能重新看见那些风、光、猫咪、城市和认真生活过的瞬间。",
+            "quote": "把日子过得具体一点，回忆就会有温度。",
+            "author": "本地书信",
             "source": "local",
-        }
+        },
+        {
+            "type": "letter",
+            "lang": "zh",
+            "title": "把路上的风留给你",
+            "body": "旅行的意义不一定是抵达远方，也可能是把一个普通下午过得更开阔。\n那些车窗外掠过的树影、突然亮起来的街灯、路边随手拍下的云，都会在多年以后替你作证。",
+            "quote": "走过的路不会消失，它会悄悄变成你的语气。",
+            "author": "本地书信",
+            "source": "local",
+        },
+        {
+            "type": "letter",
+            "lang": "zh",
+            "title": "关于小猫和陪伴",
+            "body": "镜头里的小猫总是把时间变慢：一顿饭、一场午睡、一次笨拙的奔跑，都像生活伸出的柔软小手。\n你记录它们，其实也是在记录自己怎样被日常温柔地接住。",
+            "quote": "陪伴不是宏大的词，它常常只是准时出现。",
+            "author": "本地书信",
+            "source": "local",
+        },
+        {
+            "type": "letter",
+            "lang": "zh",
+            "title": "城市会替你保存心情",
+            "body": "每座城市都有自己的光线。上海的热闹、青岛的雾、丽江的风、成都的慢，都被你放进了这些影像里。\n等以后再看，地点会先回来，然后是当时的天气、心跳和身边的人。",
+            "quote": "城市不是背景，它是回忆的共同作者。",
+            "author": "本地书信",
+            "source": "local",
+        },
+        {
+            "type": "letter",
+            "lang": "zh",
+            "title": "给未来的你",
+            "body": "如果未来某天你觉得生活有些模糊，就回来翻一翻这些片段。\n你会发现自己曾经那么鲜明地笑过、走过、期待过，也曾经把普通一天认真保存成礼物。",
+            "quote": "不要急着成为答案，先好好成为自己。",
+            "author": "本地书信",
+            "source": "local",
+        },
+        {
+            "type": "letter",
+            "lang": "zh",
+            "title": "留给周末的一封信",
+            "body": "愿你拥有一些不被催促的时间：慢慢吃饭，慢慢散步，慢慢把相册从头翻到尾。\n人需要这样的小空白，才能把心里的褶皱舒展开。",
+            "quote": "松弛不是浪费，它是在给热爱续航。",
+            "author": "本地书信",
+            "source": "local",
+        },
+        {
+            "type": "letter",
+            "lang": "zh",
+            "title": "雨天也值得被收藏",
+            "body": "不是每段记录都要晴空万里。大雾、雨声、临时改变的计划，也会让故事变得更真实。\n那些不完美的天气，往往最能显出一个人继续出发的兴致。",
+            "quote": "生活不总是发光，但它一直在发生。",
+            "author": "本地书信",
+            "source": "local",
+        },
+        {
+            "type": "letter",
+            "lang": "zh",
+            "title": "生日与烟花",
+            "body": "生日、节日和烟花都很短，可它们会把某一晚照得特别清楚。\n愿你年年都有新的愿望，也年年保留一点孩子气，继续相信热闹和浪漫。",
+            "quote": "愿每一次庆祝，都不是为了证明什么，只是因为值得。",
+            "author": "本地书信",
+            "source": "local",
+        },
+        {
+            "type": "letter",
+            "lang": "en",
+            "title": "A Small Note",
+            "body": "Keep the tiny scenes. The soft light, the unfinished laugh, the road after rain.\nOne day, these fragments will become a map back to yourself.",
+            "quote": "Memory grows clearer when it is held with care.",
+            "author": "Local note",
+            "source": "local",
+        },
+        {
+            "type": "letter",
+            "lang": "ja",
+            "title": "小さな手紙",
+            "body": "今日の光を、少しだけ残しておきましょう。\n等很久以后再回头，这些安静的小片段也会轻轻说：你来过，你爱过，你好好生活过。",
+            "quote": "たいせつな日々は、静かに心に残る。",
+            "author": "Local note",
+            "source": "local",
+        },
     ]
     if not BLESSINGS_FILE.exists():
         return {"updated_at": "", "items": default_items}
@@ -316,12 +398,17 @@ def render_html(posts: list[dict], summary: dict) -> str:
       --paper: rgba(255, 250, 242, 0.82);
       --card: rgba(255, 252, 247, 0.92);
       --line: rgba(94, 70, 50, 0.16);
+      --glass-fill: rgba(255, 255, 255, 0.42);
+      --glass-fill-strong: rgba(255, 255, 255, 0.64);
+      --glass-border: rgba(255, 255, 255, 0.54);
+      --glass-edge: rgba(255, 255, 255, 0.78);
       --ink: #2f241b;
       --muted: #7a6554;
       --accent: #bc6c4a;
       --accent-soft: #f2d2bf;
       --accent-deep: #8f4930;
       --shadow: 0 24px 60px rgba(71, 44, 24, 0.12);
+      --glass-shadow: 0 28px 70px rgba(60, 40, 24, 0.16), inset 0 1px 0 var(--glass-edge), inset 0 -22px 42px rgba(255, 255, 255, 0.22);
       --radius-xl: 28px;
       --radius-lg: 20px;
       --radius-md: 14px;
@@ -344,7 +431,9 @@ def render_html(posts: list[dict], summary: dict) -> str:
         radial-gradient(circle at top left, rgba(222, 174, 129, 0.3), transparent 30%),
         radial-gradient(circle at 85% 15%, rgba(174, 200, 190, 0.28), transparent 26%),
         linear-gradient(180deg, #f8f3eb 0%, #f3ede4 100%);
+      background-attachment: fixed;
       min-height: 100vh;
+      overflow-x: hidden;
     }}
 
     body::before {{
@@ -357,6 +446,20 @@ def render_html(posts: list[dict], summary: dict) -> str:
         linear-gradient(90deg, rgba(90, 62, 38, 0.03) 1px, transparent 1px);
       background-size: 28px 28px;
       mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.26), transparent 80%);
+    }}
+
+    body::after {{
+      content: "";
+      position: fixed;
+      inset: -22%;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(112deg, transparent 8%, rgba(255, 255, 255, 0.2) 33%, transparent 48%),
+        linear-gradient(68deg, transparent 36%, rgba(255, 255, 255, 0.14) 50%, transparent 63%);
+      filter: blur(24px);
+      opacity: 0.36;
+      mix-blend-mode: screen;
     }}
 
     img, video {{
@@ -442,28 +545,57 @@ def render_html(posts: list[dict], summary: dict) -> str:
       grid-template-columns: 1.15fr 0.85fr;
       gap: 22px;
       margin-bottom: 24px;
+      perspective: 1200px;
     }}
 
     .hero-main,
     .hero-side,
     .panel {{
-      backdrop-filter: blur(18px);
-      background: var(--paper);
-      border: 1px solid var(--line);
+      -webkit-backdrop-filter: blur(24px) saturate(1.28);
+      backdrop-filter: blur(24px) saturate(1.28);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.24)),
+        var(--paper);
+      border: 1px solid var(--glass-border);
       border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
+      box-shadow: var(--glass-shadow);
+      position: relative;
+    }}
+
+    .hero-main::selection,
+    .hero-side::selection,
+    .panel::selection {{
+      background: rgba(188, 108, 74, 0.22);
+    }}
+
+    .hero-main::marker,
+    .hero-side::marker,
+    .panel::marker {{
+      color: var(--accent);
     }}
 
     .hero-main {{
+      --cloud-x: 0px;
+      --cloud-y: 0px;
+      --glow-x: 0px;
+      --glow-y: 0px;
+      --leaf-a-x: 0px;
+      --leaf-a-y: 0px;
+      --leaf-b-x: 0px;
+      --leaf-b-y: 0px;
+      --hero-tilt-x: 0deg;
+      --hero-tilt-y: 0deg;
       padding: clamp(26px, 4vw, 42px);
-      position: relative;
       overflow: hidden;
       min-height: 620px;
       background:
         linear-gradient(115deg, rgba(58, 37, 23, 0.24), rgba(76, 48, 27, 0.08)),
         radial-gradient(circle at 18% 22%, rgba(255, 221, 179, 0.38), transparent 24%),
-        linear-gradient(180deg, rgba(255, 252, 247, 0.72), rgba(248, 240, 230, 0.84));
+      linear-gradient(180deg, rgba(255, 252, 247, 0.58), rgba(248, 240, 230, 0.62));
       isolation: isolate;
+      transform-style: preserve-3d;
+      transform: rotateX(var(--hero-tilt-x)) rotateY(var(--hero-tilt-y));
+      transition: transform 240ms ease, box-shadow 240ms ease;
     }}
 
     .hero-main::after {{
@@ -474,7 +606,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
       right: -120px;
       top: -140px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(214, 131, 82, 0.2), transparent 68%);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.26), rgba(214, 131, 82, 0.2) 42%, transparent 68%);
       animation: drift 18s ease-in-out infinite alternate;
     }}
 
@@ -503,6 +635,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
         linear-gradient(180deg, rgba(255, 197, 142, 0.18), rgba(163, 206, 247, 0.14) 42%, rgba(248, 235, 215, 0.16));
       mix-blend-mode: soft-light;
       animation: dayGlow 12s ease-in-out infinite;
+      transform: translate3d(var(--glow-x), var(--glow-y), 0) scale(1.04);
     }}
 
     .hero-copy-wrap {{
@@ -519,6 +652,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
       inset: 0;
       pointer-events: none;
       overflow: hidden;
+      z-index: 0;
     }}
 
     .leaf-shadow {{
@@ -538,7 +672,9 @@ def render_html(posts: list[dict], summary: dict) -> str:
     .leaf-shadow.leaf-a {{
       top: 40px;
       right: 120px;
-      transform: rotate(14deg);
+      --leaf-rotate: 14deg;
+      --leaf-x: var(--leaf-a-x);
+      --leaf-y: var(--leaf-a-y);
     }}
 
     .leaf-shadow.leaf-b {{
@@ -546,7 +682,9 @@ def render_html(posts: list[dict], summary: dict) -> str:
       left: 44%;
       width: 220px;
       height: 220px;
-      transform: rotate(-18deg);
+      --leaf-rotate: -18deg;
+      --leaf-x: var(--leaf-b-x);
+      --leaf-y: var(--leaf-b-y);
       animation-delay: -2.4s;
     }}
 
@@ -558,23 +696,31 @@ def render_html(posts: list[dict], summary: dict) -> str:
     }}
 
     .hero-stage-card {{
+      --stage-x: 0px;
+      --stage-y: 0px;
+      --stage-tilt-x: 0deg;
+      --stage-tilt-y: 0deg;
+      --stage-hover-y: 0px;
       position: relative;
       display: grid;
       overflow: hidden;
       border-radius: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.24);
-      box-shadow: 0 30px 70px rgba(43, 24, 12, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.48);
+      box-shadow: 0 30px 70px rgba(43, 24, 12, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.56);
       cursor: pointer;
       min-height: 280px;
       transform-style: preserve-3d;
-      transition: transform 260ms ease, box-shadow 260ms ease;
+      transform: translate3d(var(--stage-x), calc(var(--stage-y) + var(--stage-hover-y)), 34px) rotateX(var(--stage-tilt-x)) rotateY(var(--stage-tilt-y));
+      transition: transform 180ms ease, box-shadow 260ms ease;
     }}
 
     .hero-stage-card::after {{
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(29, 18, 11, 0.02), rgba(29, 18, 11, 0.58));
+      background:
+        linear-gradient(112deg, rgba(255, 255, 255, 0.34), transparent 28%, transparent 68%, rgba(255, 255, 255, 0.16)),
+        linear-gradient(180deg, rgba(29, 18, 11, 0.02), rgba(29, 18, 11, 0.58));
       pointer-events: none;
     }}
 
@@ -593,7 +739,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
     }}
 
     .hero-stage-card:hover {{
-      transform: translateY(-4px) rotateX(1.2deg) rotateY(-1.8deg);
+      --stage-hover-y: -4px;
       box-shadow: 0 34px 78px rgba(43, 24, 12, 0.22);
     }}
 
@@ -624,10 +770,13 @@ def render_html(posts: list[dict], summary: dict) -> str:
     .hero-note {{
       padding: 18px;
       border-radius: 24px;
-      background: rgba(255, 251, 245, 0.68);
-      border: 1px solid rgba(108, 78, 50, 0.12);
-      box-shadow: 0 16px 40px rgba(63, 41, 24, 0.08);
-      backdrop-filter: blur(12px);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.24)),
+        rgba(255, 251, 245, 0.52);
+      border: 1px solid rgba(255, 255, 255, 0.56);
+      box-shadow: 0 16px 40px rgba(63, 41, 24, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      -webkit-backdrop-filter: blur(18px) saturate(1.18);
+      backdrop-filter: blur(18px) saturate(1.18);
     }}
 
     .hero-note p {{
@@ -676,8 +825,12 @@ def render_html(posts: list[dict], summary: dict) -> str:
     .stat {{
       padding: 16px 18px;
       border-radius: 18px;
-      background: rgba(255, 255, 255, 0.58);
-      border: 1px solid rgba(101, 73, 49, 0.1);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.28));
+      border: 1px solid rgba(255, 255, 255, 0.54);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 14px 30px rgba(73, 48, 30, 0.08);
+      -webkit-backdrop-filter: blur(16px) saturate(1.12);
+      backdrop-filter: blur(16px) saturate(1.12);
     }}
 
     .stat strong {{
@@ -722,8 +875,12 @@ def render_html(posts: list[dict], summary: dict) -> str:
       gap: 14px;
       padding: 12px;
       border-radius: 20px;
-      border: 1px solid rgba(90, 62, 38, 0.1);
-      background: rgba(255, 255, 255, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.52);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.3));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68);
+      -webkit-backdrop-filter: blur(18px) saturate(1.16);
+      backdrop-filter: blur(18px) saturate(1.16);
       cursor: pointer;
       transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
       animation: cardIn 700ms ease both;
@@ -803,13 +960,17 @@ def render_html(posts: list[dict], summary: dict) -> str:
     .theme-pill,
     .ghost-button,
     .solid-button {{
-      border: 1px solid rgba(99, 72, 49, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.56);
       border-radius: 999px;
       padding: 10px 14px;
-      background: rgba(255, 255, 255, 0.72);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.3));
       color: var(--ink);
       cursor: pointer;
       transition: all 160ms ease;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 10px 22px rgba(73, 48, 30, 0.07);
+      -webkit-backdrop-filter: blur(14px) saturate(1.12);
+      backdrop-filter: blur(14px) saturate(1.12);
     }}
 
     .chip:hover,
@@ -840,12 +1001,16 @@ def render_html(posts: list[dict], summary: dict) -> str:
 
     .search-input {{
       width: 100%;
-      border: 1px solid rgba(90, 62, 38, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.58);
       border-radius: 18px;
       padding: 14px 16px;
-      background: rgba(255, 255, 255, 0.82);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.36));
       color: var(--ink);
       outline: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 12px 26px rgba(73, 48, 30, 0.07);
+      -webkit-backdrop-filter: blur(16px) saturate(1.12);
+      backdrop-filter: blur(16px) saturate(1.12);
     }}
 
     .search-input:focus {{
@@ -855,7 +1020,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
 
     .content-grid {{
       display: grid;
-      grid-template-columns: 0.78fr 1.22fr 0.72fr;
+      grid-template-columns: minmax(250px, 0.72fr) minmax(460px, 1.08fr) minmax(360px, 0.98fr);
       gap: 22px;
       align-items: start;
     }}
@@ -913,8 +1078,13 @@ def render_html(posts: list[dict], summary: dict) -> str:
       margin-top: 16px;
       border-radius: 24px;
       overflow: hidden;
-      background: linear-gradient(180deg, rgba(245, 231, 218, 0.96), rgba(255, 251, 245, 0.9));
-      border: 1px solid rgba(90, 62, 38, 0.1);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.24)),
+        linear-gradient(180deg, rgba(245, 231, 218, 0.8), rgba(255, 251, 245, 0.72));
+      border: 1px solid rgba(255, 255, 255, 0.52);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 18px 42px rgba(73, 48, 30, 0.1);
+      -webkit-backdrop-filter: blur(18px) saturate(1.14);
+      backdrop-filter: blur(18px) saturate(1.14);
     }}
 
     .memory-media {{
@@ -973,7 +1143,9 @@ def render_html(posts: list[dict], summary: dict) -> str:
     }}
 
     .timeline-item:hover {{
-      background: rgba(255, 255, 255, 0.56);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.24));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.64), 0 12px 28px rgba(73, 48, 30, 0.08);
       transform: translateX(4px);
     }}
 
@@ -1032,7 +1204,12 @@ def render_html(posts: list[dict], summary: dict) -> str:
         radial-gradient(circle at 14% 16%, rgba(190, 218, 188, 0.38), transparent 16%),
         radial-gradient(circle at 85% 12%, rgba(223, 233, 250, 0.42), transparent 18%),
         radial-gradient(circle at 78% 90%, rgba(243, 217, 183, 0.5), transparent 18%),
-        linear-gradient(180deg, rgba(255, 252, 247, 0.97), rgba(250, 244, 235, 0.96));
+        linear-gradient(135deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.22)),
+        linear-gradient(180deg, rgba(255, 252, 247, 0.74), rgba(250, 244, 235, 0.72));
+      min-height: 650px;
+      display: grid;
+      align-content: start;
+      gap: 18px;
     }}
 
     .letter-card::before,
@@ -1044,10 +1221,10 @@ def render_html(posts: list[dict], summary: dict) -> str:
     }}
 
     .letter-card::before {{
-      width: 96px;
-      height: 96px;
-      right: -12px;
-      top: 42px;
+      width: 132px;
+      height: 132px;
+      right: -20px;
+      top: 34px;
       background:
         radial-gradient(circle at 30% 50%, rgba(118, 154, 120, 0.72) 0 22%, transparent 24%),
         radial-gradient(circle at 55% 35%, rgba(145, 183, 141, 0.72) 0 22%, transparent 24%),
@@ -1057,10 +1234,10 @@ def render_html(posts: list[dict], summary: dict) -> str:
     }}
 
     .letter-card::after {{
-      left: -10px;
-      bottom: 18px;
-      width: 132px;
-      height: 68px;
+      left: -18px;
+      bottom: 34px;
+      width: 174px;
+      height: 88px;
       background:
         radial-gradient(circle at 20% 50%, rgba(221, 232, 248, 0.78) 0 18%, transparent 19%),
         radial-gradient(circle at 42% 40%, rgba(221, 232, 248, 0.78) 0 20%, transparent 21%),
@@ -1068,66 +1245,192 @@ def render_html(posts: list[dict], summary: dict) -> str:
         radial-gradient(circle at 82% 45%, rgba(221, 232, 248, 0.78) 0 17%, transparent 18%);
     }}
 
-    .letter-paper {{
+    .letter-frame {{
       position: relative;
       z-index: 1;
-      padding: 24px 22px;
-      border-radius: 26px;
+      min-height: 558px;
+      perspective: 1500px;
+      transform-style: preserve-3d;
+    }}
+
+    .letter-paper {{
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      padding: 34px 32px;
+      border-radius: 30px 36px 34px 26px;
       background:
+        linear-gradient(92deg, rgba(112, 76, 48, 0.13), transparent 8%, transparent 91%, rgba(255, 255, 255, 0.5)),
         repeating-linear-gradient(
           180deg,
           rgba(145, 115, 88, 0.03) 0,
-          rgba(145, 115, 88, 0.03) 28px,
-          rgba(145, 115, 88, 0.08) 29px,
-          rgba(145, 115, 88, 0.03) 30px
+          rgba(145, 115, 88, 0.03) 34px,
+          rgba(145, 115, 88, 0.08) 35px,
+          rgba(145, 115, 88, 0.03) 36px
         ),
-        rgba(255, 252, 247, 0.92);
-      border: 1px solid rgba(90, 62, 38, 0.12);
+        rgba(255, 253, 249, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      box-shadow: 0 22px 50px rgba(61, 38, 20, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      overflow: hidden;
+    }}
+
+    .letter-paper::before {{
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(255, 255, 255, 0.7), transparent 24%),
+        linear-gradient(118deg, rgba(255, 255, 255, 0.42), transparent 34%, rgba(147, 102, 70, 0.08) 72%, transparent);
+      mix-blend-mode: screen;
+      opacity: 0.68;
+    }}
+
+    .letter-paper::after {{
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 46px;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(95, 63, 37, 0.18), rgba(255, 255, 255, 0.22), transparent);
+      opacity: 0.78;
+    }}
+
+    .letter-page-current {{
+      z-index: 3;
+    }}
+
+    .letter-page-next {{
+      z-index: 2;
+      transform: rotateY(-3deg) translateX(7px) scale(0.982);
+      filter: brightness(0.98);
+    }}
+
+    .letter-page-turn {{
+      animation: paperTurnOut 820ms cubic-bezier(0.2, 0.72, 0.2, 1) forwards;
+    }}
+
+    .letter-page-reveal {{
+      animation: paperReveal 820ms cubic-bezier(0.2, 0.72, 0.2, 1) forwards;
+    }}
+
+    .letter-content {{
+      position: relative;
+      z-index: 1;
+      min-height: 100%;
+      display: grid;
+      align-content: start;
+      grid-template-rows: auto auto 1fr auto auto;
     }}
 
     .letter-kicker {{
       color: var(--accent-deep);
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
+      opacity: 0.82;
     }}
 
     .letter-title {{
-      margin: 8px 0 12px;
-      font-size: 1.5rem;
-      line-height: 1.35;
+      margin: 10px 0 20px;
+      font-size: clamp(1.75rem, 2.1vw, 2.18rem);
+      line-height: 1.24;
+      color: #2b2119;
     }}
 
     .letter-body {{
       margin: 0;
-      color: var(--muted);
-      line-height: 1.95;
+      color: #584536;
+      line-height: 2.02;
       white-space: pre-line;
-      font-size: 0.98rem;
-      min-height: 11.5em;
-      transition: opacity 360ms ease, transform 360ms ease;
+      font-size: 1.08rem;
+      min-height: 13.2em;
+      text-wrap: pretty;
     }}
 
     .letter-quote {{
-      margin-top: 20px;
-      padding-top: 16px;
+      margin-top: 24px;
+      padding: 18px 18px 0;
       border-top: 1px dashed rgba(90, 62, 38, 0.18);
-      font-size: 1rem;
-      line-height: 1.85;
-      min-height: 5.4em;
-      transition: opacity 360ms ease, transform 360ms ease;
+      font-size: 1.08rem;
+      line-height: 1.82;
+      min-height: 5.8em;
+      color: #3b2b21;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.32), transparent);
+      border-radius: 0 0 18px 18px;
     }}
 
-    .letter-flip {{
-      opacity: 0;
-      transform: translateY(10px) rotateX(-8deg);
+    .letter-content.lang-en .letter-body,
+    .letter-content.lang-en .letter-quote,
+    .letter-content.lang-ja .letter-body,
+    .letter-content.lang-ja .letter-quote {{
+      font-size: 0.98rem;
+      line-height: 1.78;
     }}
 
     .letter-sign {{
-      margin-top: 16px;
+      margin-top: 18px;
       text-align: right;
       color: var(--accent-deep);
       font-style: italic;
+      font-size: 1.02rem;
+    }}
+
+    .letter-controls {{
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }}
+
+    .letter-dots {{
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      min-width: 0;
+      flex-wrap: wrap;
+    }}
+
+    .letter-dot {{
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(188, 108, 74, 0.22);
+      transition: transform 160ms ease, background 160ms ease;
+    }}
+
+    .letter-dot.active {{
+      background: var(--accent);
+      transform: scale(1.24);
+    }}
+
+    .letter-next {{
+      flex: 0 0 auto;
+      border: 1px solid rgba(255, 255, 255, 0.58);
+      border-radius: 999px;
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      color: var(--accent-deep);
+      font-size: 1.55rem;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.3));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 12px 24px rgba(73, 48, 30, 0.1);
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }}
+
+    .letter-next:hover {{
+      transform: translateY(-1px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 16px 30px rgba(73, 48, 30, 0.14);
     }}
 
     .posts-head {{
@@ -1145,7 +1448,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
 
     .post-grid {{
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
       gap: 18px;
     }}
 
@@ -1338,31 +1641,31 @@ def render_html(posts: list[dict], summary: dict) -> str:
 
     @keyframes cloudFloat {{
       from {{
-        transform: translateX(0) translateY(0);
+        transform: translate3d(var(--cloud-x), var(--cloud-y), 0);
       }}
       to {{
-        transform: translateX(42px) translateY(-10px);
+        transform: translate3d(calc(var(--cloud-x) + 42px), calc(var(--cloud-y) - 10px), 0);
       }}
     }}
 
     @keyframes sway {{
       0% {{
-        transform: rotate(-8deg) translateY(0);
+        transform: translate3d(var(--leaf-x), var(--leaf-y), 0) rotate(calc(var(--leaf-rotate) - 8deg));
       }}
       50% {{
-        transform: rotate(5deg) translateY(8px);
+        transform: translate3d(var(--leaf-x), calc(var(--leaf-y) + 8px), 0) rotate(calc(var(--leaf-rotate) + 5deg));
       }}
       100% {{
-        transform: rotate(-4deg) translateY(-4px);
+        transform: translate3d(var(--leaf-x), calc(var(--leaf-y) - 4px), 0) rotate(calc(var(--leaf-rotate) - 4deg));
       }}
     }}
 
     @keyframes drift {{
       from {{
-        transform: translate3d(0, 0, 0);
+        transform: translate3d(var(--glow-x), var(--glow-y), 0);
       }}
       to {{
-        transform: translate3d(-28px, 18px, 0);
+        transform: translate3d(calc(var(--glow-x) - 28px), calc(var(--glow-y) + 18px), 0);
       }}
     }}
 
@@ -1378,6 +1681,42 @@ def render_html(posts: list[dict], summary: dict) -> str:
       100% {{
         opacity: 0.68;
         filter: saturate(0.96);
+      }}
+    }}
+
+    @keyframes paperTurnOut {{
+      0% {{
+        opacity: 1;
+        transform: rotateY(0deg) translateX(0) scale(1);
+        box-shadow: 0 22px 50px rgba(61, 38, 20, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      }}
+      46% {{
+        opacity: 1;
+        transform: rotateY(-76deg) translateX(-10px) scale(0.992);
+        box-shadow: 18px 22px 44px rgba(61, 38, 20, 0.2), inset 20px 0 34px rgba(126, 82, 48, 0.16);
+      }}
+      100% {{
+        opacity: 0;
+        transform: rotateY(-118deg) translateX(-18px) scale(0.985);
+        box-shadow: 24px 18px 34px rgba(61, 38, 20, 0.08), inset 34px 0 44px rgba(126, 82, 48, 0.2);
+      }}
+    }}
+
+    @keyframes paperReveal {{
+      0% {{
+        opacity: 0.62;
+        transform: rotateY(8deg) translateX(10px) scale(0.976);
+        filter: brightness(0.96);
+      }}
+      48% {{
+        opacity: 0.9;
+        transform: rotateY(4deg) translateX(5px) scale(0.988);
+        filter: brightness(0.98);
+      }}
+      100% {{
+        opacity: 1;
+        transform: rotateY(0deg) translateX(0) scale(1);
+        filter: brightness(1);
       }}
     }}
 
@@ -1416,6 +1755,14 @@ def render_html(posts: list[dict], summary: dict) -> str:
       .timeline-scroll {{
         max-height: 520px;
       }}
+
+      .letter-card {{
+        min-height: 610px;
+      }}
+
+      .letter-frame {{
+        min-height: 520px;
+      }}
     }}
 
     @media (max-width: 780px) {{
@@ -1444,7 +1791,29 @@ def render_html(posts: list[dict], summary: dict) -> str:
       .hero-main {{
         min-height: auto;
       }}
+
+      .letter-card {{
+        min-height: 580px;
+      }}
+
+      .letter-frame {{
+        min-height: 492px;
+      }}
+
+      .letter-paper {{
+        padding: 28px 22px;
+      }}
+
+      .letter-title {{
+        font-size: 1.64rem;
+      }}
+
+    .letter-body,
+    .letter-quote {{
+      font-size: 1rem;
+      }}
     }}
+
   </style>
 </head>
 <body>
@@ -1577,12 +1946,13 @@ def render_html(posts: list[dict], summary: dict) -> str:
       </main>
 
       <aside class="panel letter-card fade-in">
-        <div class="letter-paper">
-          <div class="letter-kicker">A Letter For You</div>
-          <h3 class="letter-title">写给翻到这本影像手账的人</h3>
-          <p id="letterBody" class="letter-body"></p>
-          <div id="letterQuote" class="letter-quote"></div>
-          <div class="letter-sign">愿山高水长，常有回响。</div>
+        <div id="letterFrame" class="letter-frame">
+          <article id="letterCurrent" class="letter-paper letter-page-current"></article>
+          <article id="letterNext" class="letter-paper letter-page-next"></article>
+        </div>
+        <div class="letter-controls">
+          <div id="letterDots" class="letter-dots" aria-hidden="true"></div>
+          <button id="letterNextButton" class="letter-next" type="button" aria-label="翻到下一页">›</button>
         </div>
       </aside>
     </section>
@@ -1621,8 +1991,12 @@ def render_html(posts: list[dict], summary: dict) -> str:
     const resultCount = document.getElementById("resultCount");
     const emptyState = document.getElementById("emptyState");
     const searchInput = document.getElementById("searchInput");
-    const letterBody = document.getElementById("letterBody");
-    const letterQuote = document.getElementById("letterQuote");
+    const letterCurrent = document.getElementById("letterCurrent");
+    const letterNext = document.getElementById("letterNext");
+    const letterDots = document.getElementById("letterDots");
+    const letterNextButton = document.getElementById("letterNextButton");
+    const heroMain = document.querySelector(".hero-main");
+    const heroStageCard = document.querySelector(".hero-stage-card");
     const modal = document.getElementById("postModal");
     const modalTitle = document.getElementById("modalTitle");
     const modalDate = document.getElementById("modalDate");
@@ -1633,6 +2007,50 @@ def render_html(posts: list[dict], summary: dict) -> str:
     let memoryTimer = null;
     let letterIndex = 0;
     let letterTimer = null;
+    let letterReady = false;
+    let letterAnimating = false;
+
+    function setHeroParallax(x = 0, y = 0) {{
+      if (!heroMain) return;
+      heroMain.style.setProperty("--cloud-x", `${{(-x * 18).toFixed(2)}}px`);
+      heroMain.style.setProperty("--cloud-y", `${{(-y * 12).toFixed(2)}}px`);
+      heroMain.style.setProperty("--glow-x", `${{(x * 10).toFixed(2)}}px`);
+      heroMain.style.setProperty("--glow-y", `${{(y * 8).toFixed(2)}}px`);
+      heroMain.style.setProperty("--leaf-a-x", `${{(x * 16).toFixed(2)}}px`);
+      heroMain.style.setProperty("--leaf-a-y", `${{(y * 12).toFixed(2)}}px`);
+      heroMain.style.setProperty("--leaf-b-x", `${{(-x * 20).toFixed(2)}}px`);
+      heroMain.style.setProperty("--leaf-b-y", `${{(-y * 14).toFixed(2)}}px`);
+      heroMain.style.setProperty("--hero-tilt-x", `${{(-y * 1.4).toFixed(2)}}deg`);
+      heroMain.style.setProperty("--hero-tilt-y", `${{(x * 1.6).toFixed(2)}}deg`);
+      if (heroStageCard) {{
+        heroStageCard.style.setProperty("--stage-x", `${{(x * 12).toFixed(2)}}px`);
+        heroStageCard.style.setProperty("--stage-y", `${{(y * 10).toFixed(2)}}px`);
+        heroStageCard.style.setProperty("--stage-tilt-x", `${{(-y * 2.2).toFixed(2)}}deg`);
+        heroStageCard.style.setProperty("--stage-tilt-y", `${{(x * 2.8).toFixed(2)}}deg`);
+      }}
+    }}
+
+    function initHeroParallax() {{
+      if (!heroMain || window.matchMedia("(pointer: coarse)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      let frame = 0;
+      heroMain.addEventListener("mousemove", (event) => {{
+        if (frame) return;
+        frame = window.requestAnimationFrame(() => {{
+          const rect = heroMain.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+          setHeroParallax(Math.max(-1, Math.min(1, x)), Math.max(-1, Math.min(1, y)));
+          frame = 0;
+        }});
+      }});
+      heroMain.addEventListener("mouseleave", () => {{
+        if (frame) {{
+          window.cancelAnimationFrame(frame);
+          frame = 0;
+        }}
+        setHeroParallax(0, 0);
+      }});
+    }}
 
     function escapeHtml(value) {{
       return value
@@ -1771,15 +2189,71 @@ def render_html(posts: list[dict], summary: dict) -> str:
       }}, 5200);
     }}
 
-    function flipLetterTo(item) {{
-      letterBody.classList.add("letter-flip");
-      letterQuote.classList.add("letter-flip");
+    function getLetterItems() {{
+      return (SITE_DATA.blessings && SITE_DATA.blessings.items) || [];
+    }}
+
+    function letterPageMarkup(item) {{
+      const title = item.title || "写给翻到这本影像手账的人";
+      const lang = ["zh", "en", "ja"].includes(item.lang) ? item.lang : "zh";
+      const body = escapeHtml(item.body || "").replaceAll("\\n", "<br>");
+      const quote = escapeHtml(item.quote || "").replaceAll("\\n", "<br>");
+      const author = item.author
+        ? `<br><span class="eyebrow" style="display:inline-block;margin-top:8px;">${{escapeHtml(item.author)}}</span>`
+        : "";
+      return `
+        <div class="letter-content lang-${{lang}}">
+          <div class="letter-kicker">A Letter For You</div>
+          <h3 class="letter-title">${{escapeHtml(title)}}</h3>
+          <p class="letter-body">${{body}}</p>
+          <div class="letter-quote">${{quote}}${{author}}</div>
+          <div class="letter-sign">愿山高水长，常有回响。</div>
+        </div>
+      `;
+    }}
+
+    function renderLetterDots(items) {{
+      if (!letterDots) return;
+      const limit = Math.min(items.length, 12);
+      letterDots.innerHTML = items.slice(0, limit).map((_, index) => `
+        <span class="letter-dot ${{index === (letterIndex % items.length) ? "active" : ""}}"></span>
+      `).join("");
+    }}
+
+    function flipLetterTo(index, animate = true) {{
+      const items = getLetterItems();
+      if (!items.length || !letterCurrent || !letterNext) return;
+      const nextIndex = ((index % items.length) + items.length) % items.length;
+      const nextItem = items[nextIndex];
+
+      if (!letterReady || !animate || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {{
+        letterCurrent.innerHTML = letterPageMarkup(nextItem);
+        letterCurrent.className = "letter-paper letter-page-current";
+        const previewItem = items[(nextIndex + 1) % items.length] || nextItem;
+        letterNext.innerHTML = letterPageMarkup(previewItem);
+        letterNext.className = "letter-paper letter-page-next";
+        letterIndex = nextIndex;
+        letterReady = true;
+        renderLetterDots(items);
+        return;
+      }}
+
+      if (letterAnimating) return;
+      letterAnimating = true;
+      letterNext.innerHTML = letterPageMarkup(nextItem);
+      letterNext.className = "letter-paper letter-page-next letter-page-reveal";
+      letterCurrent.classList.add("letter-page-turn");
+
       window.setTimeout(() => {{
-        letterBody.textContent = item.body || "";
-        letterQuote.innerHTML = `${{escapeHtml(item.quote || "").replaceAll("\\n", "<br>")}}${{item.author ? `<br><span class="eyebrow" style="display:inline-block;margin-top:8px;">${{escapeHtml(item.author)}}</span>` : ""}}`;
-        letterBody.classList.remove("letter-flip");
-        letterQuote.classList.remove("letter-flip");
-      }}, 180);
+        letterCurrent.innerHTML = letterPageMarkup(nextItem);
+        letterCurrent.className = "letter-paper letter-page-current";
+        const previewItem = items[(nextIndex + 1) % items.length] || nextItem;
+        letterNext.innerHTML = letterPageMarkup(previewItem);
+        letterNext.className = "letter-paper letter-page-next";
+        letterIndex = nextIndex;
+        renderLetterDots(items);
+        letterAnimating = false;
+      }}, 840);
     }}
 
     async function loadRemoteBlessings() {{
@@ -1796,20 +2270,18 @@ def render_html(posts: list[dict], summary: dict) -> str:
     }}
 
     function renderLetter() {{
-      const items = (SITE_DATA.blessings && SITE_DATA.blessings.items) || [];
-      if (!items.length) return;
-      const pick = items[letterIndex % items.length];
-      flipLetterTo(pick);
+      flipLetterTo(letterIndex, letterReady);
     }}
 
     function startLetterFlip() {{
       if (letterTimer) clearInterval(letterTimer);
+      const items = getLetterItems();
+      if (!items.length) return;
+      letterReady = false;
       renderLetter();
-      const items = (SITE_DATA.blessings && SITE_DATA.blessings.items) || [];
       if (items.length <= 1) return;
       letterTimer = setInterval(() => {{
-        letterIndex = (letterIndex + 1) % items.length;
-        renderLetter();
+        flipLetterTo(letterIndex + 1);
       }}, 7600);
     }}
 
@@ -1980,6 +2452,18 @@ def render_html(posts: list[dict], summary: dict) -> str:
       renderPosts();
     }});
 
+    if (letterNextButton) {{
+      letterNextButton.addEventListener("click", () => {{
+        const items = getLetterItems();
+        if (items.length <= 1 || letterAnimating) return;
+        if (letterTimer) clearInterval(letterTimer);
+        flipLetterTo(letterIndex + 1);
+        letterTimer = setInterval(() => {{
+          flipLetterTo(letterIndex + 1);
+        }}, 7600);
+      }});
+    }}
+
     modalClose.addEventListener("click", closeModal);
     modal.addEventListener("click", (event) => {{
       if (event.target === modal) closeModal();
@@ -1989,6 +2473,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
     }});
 
     attachMediaFallbacks(document.querySelector(".hero-main"));
+    initHeroParallax();
     startMemoryCarousel();
     refreshButtonState();
     renderPosts();

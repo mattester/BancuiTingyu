@@ -4,8 +4,6 @@ on:
   push:
     branches: ["main"]
   workflow_dispatch:
-  schedule:
-    - cron: "17 1 * * *"
 
 permissions:
   contents: read
@@ -31,20 +29,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Refresh blessings cache
-        run: python fetch_blessings.py
-
       - name: Rebuild site
         run: python build_site.py
-
-      - name: Commit refreshed content
-        if: github.event_name == 'schedule'
-        run: |
-          git config user.name "Codex Agent"
-          git config user.email "codex-agent@local"
-          git add blessings.json index.html
-          git diff --cached --quiet || git commit -m "Refresh blessings cache"
-          git push
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
