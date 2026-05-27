@@ -12,6 +12,7 @@ from urllib.parse import quote
 
 ROOT = Path.cwd()
 OUTPUT = ROOT / "index.html"
+BLESSINGS_FILE = ROOT / "blessings.json"
 SOURCE_PATTERN = re.compile(r"^@?(?P<author>[^_]+)_(?P<date>\d{8})_(?P<title>.+?)\.(?P<ext>mp4|mp3|webp)$")
 TRAILING_INDEX_PATTERN = re.compile(r"_(\d+)$")
 
@@ -192,8 +193,32 @@ def build_summary(posts: list[dict]) -> dict:
     }
 
 
+def load_blessings() -> dict:
+    default_items = [
+        {
+            "type": "letter",
+            "title": "写给翻到这本影像手账的人",
+            "body": "愿你在翻看这些片段的时候，仍然保有对生活细部的耐心。\n有风的时候去看云，有雨的时候去听树叶，有人陪伴时认真相处，一个人时也不慌不忙。",
+            "quote": "且视他人之疑目如盏盏鬼火，大胆地去走你的夜路。",
+            "author": "史铁生《病隙碎笔》",
+            "source": "local",
+        }
+    ]
+    if not BLESSINGS_FILE.exists():
+        return {"updated_at": "", "items": default_items}
+    try:
+        data = json.loads(BLESSINGS_FILE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {"updated_at": "", "items": default_items}
+    items = data.get("items") or default_items
+    return {
+        "updated_at": data.get("updated_at", ""),
+        "items": items,
+    }
+
+
 def render_html(posts: list[dict], summary: dict) -> str:
-    payload = json.dumps({"posts": posts, "summary": summary}, ensure_ascii=False)
+    payload = json.dumps({"posts": posts, "summary": summary, "blessings": load_blessings()}, ensure_ascii=False)
     featured = summary["featured"]
 
     def esc(value: str) -> str:
@@ -438,6 +463,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
         linear-gradient(115deg, rgba(58, 37, 23, 0.24), rgba(76, 48, 27, 0.08)),
         radial-gradient(circle at 18% 22%, rgba(255, 221, 179, 0.38), transparent 24%),
         linear-gradient(180deg, rgba(255, 252, 247, 0.72), rgba(248, 240, 230, 0.84));
+      isolation: isolate;
     }}
 
     .hero-main::after {{
@@ -466,6 +492,17 @@ def render_html(posts: list[dict], summary: dict) -> str:
       filter: blur(2px);
       opacity: 0.72;
       animation: cloudFloat 14s ease-in-out infinite alternate;
+    }}
+
+    .hero-breath {{
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(255, 197, 142, 0.18), rgba(163, 206, 247, 0.14) 42%, rgba(248, 235, 215, 0.16));
+      mix-blend-mode: soft-light;
+      animation: dayGlow 12s ease-in-out infinite;
     }}
 
     .hero-copy-wrap {{
@@ -529,6 +566,8 @@ def render_html(posts: list[dict], summary: dict) -> str:
       box-shadow: 0 30px 70px rgba(43, 24, 12, 0.18);
       cursor: pointer;
       min-height: 280px;
+      transform-style: preserve-3d;
+      transition: transform 260ms ease, box-shadow 260ms ease;
     }}
 
     .hero-stage-card::after {{
@@ -551,6 +590,11 @@ def render_html(posts: list[dict], summary: dict) -> str:
       height: 100%;
       object-fit: cover;
       transform: scale(1.04);
+    }}
+
+    .hero-stage-card:hover {{
+      transform: translateY(-4px) rotateX(1.2deg) rotateY(-1.8deg);
+      box-shadow: 0 34px 78px rgba(43, 24, 12, 0.22);
     }}
 
     .hero-stage-copy {{
@@ -682,6 +726,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
       background: rgba(255, 255, 255, 0.58);
       cursor: pointer;
       transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+      animation: cardIn 700ms ease both;
     }}
 
     .hero-card:hover,
@@ -1059,6 +1104,8 @@ def render_html(posts: list[dict], summary: dict) -> str:
       line-height: 1.95;
       white-space: pre-line;
       font-size: 0.98rem;
+      min-height: 11.5em;
+      transition: opacity 360ms ease, transform 360ms ease;
     }}
 
     .letter-quote {{
@@ -1067,6 +1114,13 @@ def render_html(posts: list[dict], summary: dict) -> str:
       border-top: 1px dashed rgba(90, 62, 38, 0.18);
       font-size: 1rem;
       line-height: 1.85;
+      min-height: 5.4em;
+      transition: opacity 360ms ease, transform 360ms ease;
+    }}
+
+    .letter-flip {{
+      opacity: 0;
+      transform: translateY(10px) rotateX(-8deg);
     }}
 
     .letter-sign {{
@@ -1104,6 +1158,15 @@ def render_html(posts: list[dict], summary: dict) -> str:
       cursor: pointer;
       transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
       overflow: hidden;
+      animation: cardIn 720ms ease both;
+    }}
+
+    .post-card:nth-child(2n) {{
+      animation-delay: 50ms;
+    }}
+
+    .post-card:nth-child(3n) {{
+      animation-delay: 90ms;
     }}
 
     .post-cover {{
@@ -1303,6 +1366,32 @@ def render_html(posts: list[dict], summary: dict) -> str:
       }}
     }}
 
+    @keyframes dayGlow {{
+      0% {{
+        opacity: 0.62;
+        filter: saturate(1);
+      }}
+      50% {{
+        opacity: 0.95;
+        filter: saturate(1.08);
+      }}
+      100% {{
+        opacity: 0.68;
+        filter: saturate(0.96);
+      }}
+    }}
+
+    @keyframes cardIn {{
+      from {{
+        opacity: 0;
+        transform: translateY(18px) scale(0.985);
+      }}
+      to {{
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }}
+    }}
+
     @media (max-width: 1100px) {{
       .hero,
       .filters,
@@ -1373,6 +1462,7 @@ def render_html(posts: list[dict], summary: dict) -> str:
 
     <section class="hero fade-in">
       <div class="hero-main">
+        <div class="hero-breath" aria-hidden="true"></div>
         <div class="hero-decor" aria-hidden="true">
           <div class="leaf-shadow leaf-a"></div>
           <div class="leaf-shadow leaf-b"></div>
@@ -1541,25 +1631,8 @@ def render_html(posts: list[dict], summary: dict) -> str:
     const modalClose = document.getElementById("modalClose");
     let memoryIndex = 0;
     let memoryTimer = null;
-
-    const LETTERS = [
-      {{
-        body: "愿你在翻看这些片段的时候，仍然保有对生活细部的耐心。\\n有风的时候去看云，有雨的时候去听树叶，有人陪伴时认真相处，一个人时也不慌不忙。",
-        quote: "且视他人之疑目如盏盏鬼火，大胆地去走你的夜路。\\n《病隙碎笔》"
-      }},
-      {{
-        body: "如果回忆能被装订成册，那些猫咪、旅途、街头傍晚与细小欢喜，都会在多年以后继续替你发光。\\n愿你始终有记录生活的兴致，也始终被生活温柔记录。",
-        quote: "凡是过往，皆为序章。\\n莎士比亚"
-      }},
-      {{
-        body: "这页书信不写宏大叙事，只写日常的光。\\n愿你所拥有的热爱，不必声张，也能长久；愿你偶尔疲惫时，仍能被一朵云、一片叶、一段旧影像安慰。",
-        quote: "行到水穷处，坐看云起时。\\n王维《终南别业》"
-      }},
-      {{
-        body: "愿你在很远的地方，也能想起此刻的自己曾经这样认真地生活过。\\n路过的人、经过的城、被镜头留下来的猫与风景，终会一起构成你的答案。",
-        quote: "我们终其一生，就是要摆脱他人的期待，找到真正的自己。\\n《无声告白》"
-      }}
-    ];
+    let letterIndex = 0;
+    let letterTimer = null;
 
     function escapeHtml(value) {{
       return value
@@ -1698,10 +1771,46 @@ def render_html(posts: list[dict], summary: dict) -> str:
       }}, 5200);
     }}
 
+    function flipLetterTo(item) {{
+      letterBody.classList.add("letter-flip");
+      letterQuote.classList.add("letter-flip");
+      window.setTimeout(() => {{
+        letterBody.textContent = item.body || "";
+        letterQuote.innerHTML = `${{escapeHtml(item.quote || "").replaceAll("\\n", "<br>")}}${{item.author ? `<br><span class="eyebrow" style="display:inline-block;margin-top:8px;">${{escapeHtml(item.author)}}</span>` : ""}}`;
+        letterBody.classList.remove("letter-flip");
+        letterQuote.classList.remove("letter-flip");
+      }}, 180);
+    }}
+
+    async function loadRemoteBlessings() {{
+      try {{
+        const response = await fetch(`blessings.json?ts=${{Date.now()}}`, {{ cache: "no-store" }});
+        if (!response.ok) return;
+        const data = await response.json();
+        if (Array.isArray(data.items) && data.items.length) {{
+          SITE_DATA.blessings = data;
+        }}
+      }} catch (_error) {{
+        return;
+      }}
+    }}
+
     function renderLetter() {{
-      const pick = LETTERS[Math.floor((SITE_DATA.posts.length * 7 + new Date().getDate()) % LETTERS.length)];
-      letterBody.textContent = pick.body;
-      letterQuote.innerHTML = pick.quote.replaceAll("\\n", "<br>");
+      const items = (SITE_DATA.blessings && SITE_DATA.blessings.items) || [];
+      if (!items.length) return;
+      const pick = items[letterIndex % items.length];
+      flipLetterTo(pick);
+    }}
+
+    function startLetterFlip() {{
+      if (letterTimer) clearInterval(letterTimer);
+      renderLetter();
+      const items = (SITE_DATA.blessings && SITE_DATA.blessings.items) || [];
+      if (items.length <= 1) return;
+      letterTimer = setInterval(() => {{
+        letterIndex = (letterIndex + 1) % items.length;
+        renderLetter();
+      }}, 7600);
     }}
 
     function renderPosts() {{
@@ -1880,10 +1989,12 @@ def render_html(posts: list[dict], summary: dict) -> str:
     }});
 
     attachMediaFallbacks(document.querySelector(".hero-main"));
-    renderLetter();
     startMemoryCarousel();
     refreshButtonState();
     renderPosts();
+    loadRemoteBlessings().finally(() => {{
+      startLetterFlip();
+    }});
   </script>
 </body>
 </html>

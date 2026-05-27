@@ -1,0 +1,104 @@
+{
+  "updated_at": "2026-05-27T15:29:49.585598Z",
+  "items": [
+    {
+      "type": "poem",
+      "title": "Imitation",
+      "body": "A dark unfathomed tide\nOf interminable pride--\nA mystery, and a dream,\nShould my early life seem;",
+      "quote": "I say that dream was fraught\nWith a wild and waking thought\nOf beings that have been,\nWhich my spirit hath not seen,",
+      "author": "Edgar Allan Poe",
+      "source": "PoetryDB"
+    },
+    {
+      "type": "advice",
+      "title": "一则轻轻落下的提醒",
+      "body": "愿这些来自世界另一端的小句子，也能在今天给你一点点光。",
+      "quote": "Eliminate the unnecessary.",
+      "author": "Advice Slip",
+      "source": "Advice Slip JSON API"
+    },
+    {
+      "type": "advice",
+      "title": "一则轻轻落下的提醒",
+      "body": "愿这些来自世界另一端的小句子，也能在今天给你一点点光。",
+      "quote": "Don't eat non-snow-coloured snow.",
+      "author": "Advice Slip",
+      "source": "Advice Slip JSON API"
+    },
+    {
+      "type": "poem",
+      "title": "Remembrance",
+      "body": "'Tis done!--I saw it in my dreams:\nNo more with Hope the future beams;\n  My days of happiness are few:\nChill'd by Misfortune's wintry blast,",
+      "quote": "My dawn of Life is overcast;\n  Love, Hope, and Joy, alike adieu!\n  Would I could add Remembrance too!",
+      "author": "George Gordon, Lord Byron",
+      "source": "PoetryDB"
+    },
+    {
+      "type": "poem",
+      "title": "The Canterbury Tales. The Manciple's Tale.",
+      "body": "THE PROLOGUE.\n\nWEET ye not where there stands a little town,\nWhich that y-called is Bob-up-and-down,",
+      "quote": "Under the Blee, in Canterbury way?\nThere gan our Hoste for to jape and play,\nAnd saide, \"Sirs, what? Dun is in the mire.\nIs there no man, for prayer nor for hire,",
+      "author": "Geoffrey Chaucer",
+      "source": "PoetryDB"
+    },
+    {
+      "type": "advice",
+      "title": "一则轻轻落下的提醒",
+      "body": "愿这些来自世界另一端的小句子，也能在今天给你一点点光。",
+      "quote": "It's not about who likes you, it's about who you like.",
+      "author": "Advice Slip",
+      "source": "Advice Slip JSON API"
+    },
+    {
+      "type": "poem",
+      "title": "The Daguerreotype",
+      "body": "This, then, is she,\nMy mother as she looked at seventeen,\nWhen she first met my father. Young incredibly,\nYounger than spring, without the faintest trace",
+      "quote": "Of disappointment, weariness, or tean\nUpon the childlike earnestness and grace\nOf the waiting face.\nThose close-wound ropes of pearl",
+      "author": "William Vaughn Moody",
+      "source": "PoetryDB"
+    },
+    {
+      "type": "poem",
+      "title": "Winter Stores",
+      "body": "WE take from life one little share,\nAnd say that this shall be\nA space, redeemed from toil and care,\nFrom tears and sadness free.",
+      "quote": "And, haply, Death unstrings his bow\nAnd Sorrow stands apart,\nAnd, for a little while, we know",
+      "author": "Charlotte Bronte",
+      "source": "PoetryDB"
+    },
+    {
+      "type": "poem",
+      "title": "Book II. Satire VI. the First Part Imitated in the Year 1714, by Dr",
+      "body": "SWIFT; THE LATTER PART ADDED AFTERWARDS.\n\nI've often wish'd that I had clear,\nFor life, six hundred pounds a-year,",
+      "quote": "A handsome house to lodge a friend,\nA river at my garden's end,\nA terrace-walk, and half a rood\nOf land, set out to plant a wood.",
+      "author": "Alexander Pope",
+      "source": "PoetryDB"
+    },
+    {
+      "type": "poem",
+      "title": "The Canterbury Tales. The Wife of Bath's Tale.",
+      "body": "THE PROLOGUE.\n\nExperience, though none authority\nWere in this world, is right enough for me",
+      "quote": "To speak of woe that is in marriage:\nFor, lordings, since I twelve year was of age,\n(Thanked be God that is etern on live),\nHusbands at the church door have I had five,",
+      "author": "Geoffrey Chaucer",
+      "source": "PoetryDB"
+    },
+    {
+      "type": "advice",
+      "title": "一则轻轻落下的提醒",
+      "body": "愿这些来自世界另一端的小句子，也能在今天给你一点点光。",
+      "quote": "When you're at a concert or event, enjoy the moment, enjoy being there. Try leaving your camera in your pocket.",
+      "author": "Advice Slip",
+      "source": "Advice Slip JSON API"
+    },
+    {
+      "type": "poem",
+      "title": "To Helen",
+      "body": "I saw thee once--once only--years ago:\nI must not say _how_ many--but _not_ many.\nIt was a July midnight; and from out\nA full-orbed moon, that, like thine own soul, soaring,",
+      "quote": "Sought a precipitate pathway up through heaven,\nThere fell a silvery-silken veil of light,\nWith quietude, and sultriness and slumber,\nUpon the upturn'd faces of a thousand",
+      "author": "Edgar Allan Poe",
+      "source": "PoetryDB"
+    }
+  ],
+  "errors": [
+    "try_fetch_zenquotes: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+  ]
+}
